@@ -3,6 +3,7 @@ from typing import TypedDict, cast
 from langgraph.graph import END, START, StateGraph
 
 from demo.config import content_to_text, get_llm
+from demo.markdown_output import render_markdown
 
 
 class DemoState(TypedDict):
@@ -91,8 +92,23 @@ def run_langgraph_demo(topic: str = "LangGraph for agent workflows") -> DemoStat
 
 
 if __name__ == "__main__":
-    print("=== LangGraph Demo ===")
     result = run_langgraph_demo("How to build robust LLM workflows")
-    print("Plan:\n", result["plan"])
-    print("\nFinal Draft:\n", result["draft"])
-    print("\nQuality:", result["quality"])
+    markdown = f"""# LangGraph Demo
+
+## Plan
+
+```markdown
+{result["plan"]}
+```
+
+## Final Draft
+
+```markdown
+{result["draft"]}
+```
+
+## Quality
+
+- **Result:** `{result["quality"]}`
+"""
+    print(render_markdown(markdown))

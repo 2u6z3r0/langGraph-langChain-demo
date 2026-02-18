@@ -1,6 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 
 from demo.config import content_to_text, get_llm
+from demo.markdown_output import render_markdown
 
 
 def run_langchain_demo(topic: str = "LangChain basics") -> str:
@@ -25,5 +26,5 @@ def run_langchain_demo(topic: str = "LangChain basics") -> str:
 
 
 if __name__ == "__main__":
-    print("=== LangChain Demo ===")
-    print(run_langchain_demo("How LangChain helps build LLM apps"))
+    response = run_langchain_demo("How LangChain helps build LLM apps")
+    print(render_markdown(f"# LangChain Demo\n\n## Response\n\n{response}"))

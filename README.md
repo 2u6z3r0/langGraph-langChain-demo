@@ -1,6 +1,7 @@
 # LangChain + LangGraph Multi-Provider Demo
 
 A minimal Python demo project that shows:
+
 - `LangChain`: prompt + model composition
 - `LangGraph`: small stateful workflow graph
 - Switchable LLM providers: `Gemini`, `OpenAI`, `DeepSeek`
@@ -8,7 +9,6 @@ A minimal Python demo project that shows:
 ## 1) Setup (uv)
 
 ```bash
-cd /Users/max/Downloads/codex-blog/langchain-langgraph-gemini-demo
 uv venv
 source .venv/bin/activate
 uv sync
