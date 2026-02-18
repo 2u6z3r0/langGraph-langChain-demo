@@ -1,6 +1,6 @@
 from langchain_core.prompts import ChatPromptTemplate
 
-from demo.config import get_llm
+from demo.config import content_to_text, get_llm
 
 
 def run_langchain_demo(topic: str = "LangChain basics") -> str:
@@ -21,7 +21,7 @@ def run_langchain_demo(topic: str = "LangChain basics") -> str:
 
     chain = prompt | llm
     response = chain.invoke({"topic": topic})
-    return response.content
+    return content_to_text(response.content)
 
 
 if __name__ == "__main__":

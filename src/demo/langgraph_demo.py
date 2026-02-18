@@ -1,8 +1,8 @@
-from typing import TypedDict
+from typing import TypedDict, cast
 
 from langgraph.graph import END, START, StateGraph
 
-from demo.config import get_llm
+from demo.config import content_to_text, get_llm
 
 
 class DemoState(TypedDict):
@@ -20,7 +20,7 @@ def create_graph():
             "Create a 3-step plan for a short technical demo talk about: "
             f"{state['topic']}. Return plain text."
         )
-        plan = llm.invoke(prompt).content
+        plan = content_to_text(llm.invoke(prompt).content)
         return {**state, "plan": plan}
 
     def writer(state: DemoState) -> DemoState:
@@ -28,7 +28,7 @@ def create_graph():
             "Write a short demo script (120-180 words) using this plan:\n"
             f"{state['plan']}"
         )
-        draft = llm.invoke(prompt).content
+        draft = content_to_text(llm.invoke(prompt).content)
         return {**state, "draft": draft}
 
     def reviewer(state: DemoState) -> DemoState:
@@ -37,7 +37,7 @@ def create_graph():
             "Use PASS if it is clear, concise, and practical.\n\n"
             f"Draft:\n{state['draft']}"
         )
-        quality = llm.invoke(prompt).content.strip().upper()
+        quality = content_to_text(llm.invoke(prompt).content).strip().upper()
         if "PASS" not in quality:
             quality = "FAIL"
         else:
@@ -49,7 +49,7 @@ def create_graph():
             "Revise this draft to make it clearer and more practical. Keep it under 180 words.\n\n"
             f"{state['draft']}"
         )
-        draft = llm.invoke(prompt).content
+        draft = content_to_text(llm.invoke(prompt).content)
         return {**state, "draft": draft, "quality": "PASS"}
 
     def route_after_review(state: DemoState) -> str:
@@ -87,7 +87,7 @@ def run_langgraph_demo(topic: str = "LangGraph for agent workflows") -> DemoStat
         "draft": "",
         "quality": "",
     }
-    return app.invoke(initial_state)
+    return cast(DemoState, app.invoke(initial_state))
 
 
 if __name__ == "__main__":
